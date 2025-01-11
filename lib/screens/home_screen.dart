@@ -1,9 +1,9 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'daily_nurtures_screen.dart'; // Ensure these files exist
 import 'log_mood_screen.dart';       // Ensure these files exist
 import 'instant_screen.dart';         // Ensure these files exist
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  bool isSignedIn = false; // Placeholder for user's sign-in status
+  late AuthProvider authProvider; // Declare a variable for AuthProvider
 
   // List of screens for each navigation item
   final List<Widget> _screens = [
@@ -24,7 +24,44 @@ class _HomeScreenState extends State<HomeScreen> {
     DailyNurturesScreen(),      // Screen for daily nurtures
   ];
 
-  void _onItemTapped(int index) {
+  @override
+  Widget build(BuildContext context) {
+    // Access the AuthProvider inside the build method
+    authProvider = Provider.of<AuthProvider>(context);
+    final isSignedIn = authProvider.isSignedIn; // Check if user is signed in
+
+    return Scaffold(
+      backgroundColor: Colors.white, // Set the background color to white
+      body: _screens[_selectedIndex], // Display the currently selected screen
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, color: Colors.black),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.flash_on, color: Colors.black),
+            label: 'Instant',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.mood, color: Colors.black),
+            label: 'Log Mood',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.nature, color: Colors.black),
+            label: 'Daily Nurtures',
+          ),
+        ],
+        currentIndex: _selectedIndex, // Set the current index
+        onTap: (index) => _onItemTapped(index, isSignedIn), // Pass signedIn status
+        backgroundColor: Colors.black,  // Set bottom navigation bar color
+        selectedItemColor: Colors.blue,  // Selected item color
+        unselectedItemColor: Colors.white, // Unselected item color
+      ),
+    );
+  }
+
+  void _onItemTapped(int index, bool isSignedIn) {
     if (index == 0 || isSignedIn) { // Allow access to Home screen always or if user is signed in
       setState(() {
         _selectedIndex = index; // Update the selected index
@@ -54,39 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
-      body: _screens[_selectedIndex], // Display the currently selected screen
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.black),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.flash_on, color: Colors.black),
-            label: 'Instant',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mood, color: Colors.black),
-            label: 'Log Mood',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.nature, color: Colors.black),
-            label: 'Daily Nurtures',
-          ),
-        ],
-        currentIndex: _selectedIndex, // Set the current index
-        onTap: _onItemTapped,          // Handle tab changes
-        backgroundColor: Colors.black,  // Set the bottom navigation bar background color to black
-        selectedItemColor: Colors.blue,  // Selected item color
-        unselectedItemColor: Colors.white, // Unselected item color
-      ),
     );
   }
 }

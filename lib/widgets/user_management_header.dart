@@ -1,98 +1,69 @@
-// lib/widgets/user_management_header.dart
-
 import 'package:flutter/material.dart';
-import 'login_dialog.dart';
-import 'sign_up_dialog.dart';
-import 'logout_dialog.dart'; // Import the logout dialog
+import 'package:provider/provider.dart';
+import '../../providers/auth_provider.dart'; // Ensure this path is correct
+import '../../screens/auth/login_dialog.dart'; // Import LoginDialog
+import '../../screens/auth/sign_up_dialog.dart'; // Import SignUpDialog
+import '../../screens/auth/logout_dialog.dart'; // Import LogoutDialog
 
-class UserManagementHeader extends StatefulWidget implements PreferredSizeWidget {
-  const UserManagementHeader({Key? key}) : super(key: key);
+class UserManagementHeader extends StatelessWidget implements PreferredSizeWidget {
+  final Function(bool) onSignedIn;
 
-  @override
-  _UserManagementHeaderState createState() => _UserManagementHeaderState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight); // Set the preferred size for the AppBar
-}
-
-class _UserManagementHeaderState extends State<UserManagementHeader> {
-  bool isSignedIn = false; // Local state to track sign-in status
+  const UserManagementHeader({Key? key, required this.onSignedIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final isSignedIn = authProvider.isSignedIn;
+
     return AppBar(
       title: const Text('Golden Minds'),
-      actions: <Widget>[
+      actions: [
         PopupMenuButton<String>(
-          icon: const Icon(Icons.more_vert),
           onSelected: (value) {
-            if (value == 'Login') {
-              _showLoginDialog(context);
-            } else if (value == 'Sign Up') {
-              _showSignUpDialog(context);
-            } else if (value == 'Logout') {
-              _showLogoutDialog(context);
+            if (value == 'Login' && !isSignedIn) {
+              showDialog(
+                context: context,
+                builder: (context) => const LoginDialog(), // Show the login dialog
+              );
+            } else if (value == 'Sign Up' && !isSignedIn) {
+              showDialog(
+                context: context,
+                builder: (context) => const SignUpDialog(), // Show the signup dialog
+              );
+            } else if (value == 'Logout' && isSignedIn) {
+              showDialog(
+                context: context,
+                builder: (context) => const LogoutDialog(), // Show the logout confirmation dialog
+              ).then((_) {
+                if (authProvider.isSignedIn == false) {
+                  // Notify parent about sign-out
+                  onSignedIn(false);
+                }
+              });
             }
           },
-          itemBuilder: (BuildContext context) {
-            return [
-              if (!isSignedIn)
-                const PopupMenuItem<String>(
-                  value: 'Login',
-                  child: Text('Login'),
-                ),
-              if (!isSignedIn)
-                const PopupMenuItem<String>(
-                  value: 'Sign Up',
-                  child: Text('Sign Up'),
-                ),
-              if (isSignedIn)
-                const PopupMenuItem<String>(
-                  value: 'Logout',
-                  child: Text('Logout'),
-                ),
-            ];
-          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            PopupMenuItem<String>(
+              value: 'Login',
+              enabled: !isSignedIn,
+              child: const Text('Login'),
+            ),
+            PopupMenuItem<String>(
+              value: 'Sign Up',
+              enabled: !isSignedIn,
+              child: const Text('Sign Up'),
+            ),
+            PopupMenuItem<String>(
+              value: 'Logout',
+              enabled: isSignedIn,
+              child: const Text('Logout'),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  void _showLoginDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => LoginDialog(setSignedIn: (bool value) {
-        setState(() {
-          isSignedIn = value;
-        });
-      }),
-    );
-  }
-
-  void _showSignUpDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => SignUpDialog(setSignedIn: (bool value) {
-        setState(() {
-          isSignedIn = value;
-        });
-      }),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => LogoutDialog(onLogoutConfirmed: () {
-        _logout(); // Call the logout logic
-      }),
-    );
-  }
-
-  void _logout() {
-    setState(() {
-      isSignedIn = false; // Reset the sign-in status
-    });
-    print('User logged out');
-  }
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

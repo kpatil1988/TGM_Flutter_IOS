@@ -1,15 +1,21 @@
-// lib/main.dart
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'widgets/user_management_header.dart';
 import 'widgets/app_drawer.dart'; // Import the AppDrawer
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart'; // Import ProfileScreen if not already
 import 'screens/insights_screen.dart'; // Import InsightsScreen
 import 'screens/settings_screen.dart'; // Import SettingsScreen
+import 'providers/auth_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AuthProvider(), // Initialize the AuthProvider
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +23,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context); // Access AuthProvider
     return MaterialApp(
+      title: 'My App',
+      theme: authProvider.isDarkMode ? ThemeData.dark() : ThemeData.light(), // Toggling themes
       home: const MainScreen(), // Use MainScreen as the home widget
     );
   }
@@ -29,7 +38,13 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const UserManagementHeader(), // Init without isSignedIn
+      appBar: UserManagementHeader(
+        onSignedIn: (bool isSignedIn) {
+          // Handle updated sign-in state
+          // You can add logic here to update the UI or app state as needed
+          print('Sign-in state changed: $isSignedIn');
+        },
+      ), // Now initialized with onSignedIn parameter
       drawer: const AppDrawer(), // Instancing the AppDrawer
       body: const HomeScreen(), // Your main content area
     );
