@@ -9,20 +9,29 @@ import 'screens/insights_screen.dart'; // Import InsightsScreen
 import 'screens/settings_screen.dart'; // Import SettingsScreen
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key); // Add key for better widget performance
+
   @override
   Widget build(BuildContext context) {
-    bool isSignedIn = false; // Replace with your actual logic
-
     return MaterialApp(
-      home: Scaffold(
-        appBar: UserManagementHeader(isSignedIn: isSignedIn), // Keep this if desired
-        drawer: const AppDrawer(), // Instancing the AppDrawer
-        body: HomeScreen(), // Your main content area
-      ),
+      home: const MainScreen(), // Use MainScreen as the home widget
+    );
+  }
+}
+
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key); // Create a new MainScreen
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const UserManagementHeader(), // Init without isSignedIn
+      drawer: const AppDrawer(), // Instancing the AppDrawer
+      body: const HomeScreen(), // Your main content area
     );
   }
 }
