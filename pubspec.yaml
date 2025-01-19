@@ -1,5 +1,5 @@
 name: goldenminds
-description: "The Golden Minds App for your hollistic well being"
+description: "The Golden Minds App for your holistic well-being"
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -16,6 +16,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   multi_select_flutter: ^4.0.0
   speech_to_text: ^7.0.0
+  http: ^1.2.2
+  dio: ^5.0.0
+  shared_preferences: ^2.0.0  # Added the shared_preferences package
+  flutter_tts: ^3.2.2
 
 dev_dependencies:
   flutter_test:
@@ -24,3 +28,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/config.json

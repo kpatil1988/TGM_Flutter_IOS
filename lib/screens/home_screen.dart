@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
-import 'daily_nurtures_screen.dart'; // Ensure these files exist
-import 'log_mood_screen.dart';       // Ensure these files exist
-import 'instant_screen.dart';         // Ensure these files exist
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import 'daily_nurtures_screen.dart';
+import 'log_mood_screen.dart';
+import 'instant_screen.dart'; // Import the InstantScreen
 
+// Widget for Home
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Home',
+        style: TextStyle(fontSize: 24, color: Colors.black),
+      ),
+    );
+  }
+}
+
+// Main Home Screen
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -14,25 +30,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  late AuthProvider authProvider; // Declare a variable for AuthProvider
 
-  // List of screens for each navigation item
+  // Changed this to ensure that constructors which are not const do not cause issues
   final List<Widget> _screens = [
-    HomeWidget(),               // Default Home screen content
-    InstantScreen(),            // Instant actions screen
-    LogMoodScreen(),            // Screen for logging mood
-    DailyNurturesScreen(),      // Screen for daily nurtures
+    HomeWidget(),
+    InstantScreen(), // Now using non-const constructors
+    LogMoodScreen(),
+    DailyNurturesScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // Access the AuthProvider inside the build method
-    authProvider = Provider.of<AuthProvider>(context);
-    final isSignedIn = authProvider.isSignedIn; // Check if user is signed in
+    final isSignedIn = Provider.of<AuthProvider>(context).isSignedIn;
 
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
-      body: _screens[_selectedIndex], // Display the currently selected screen
+      backgroundColor: Colors.white,
+      body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -52,22 +65,22 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Daily Nurtures',
           ),
         ],
-        currentIndex: _selectedIndex, // Set the current index
-        onTap: (index) => _onItemTapped(index, isSignedIn), // Pass signedIn status
-        backgroundColor: Colors.black,  // Set bottom navigation bar color
-        selectedItemColor: Colors.blue,  // Selected item color
-        unselectedItemColor: Colors.white, // Unselected item color
+        currentIndex: _selectedIndex,
+        onTap: (index) => _onItemTapped(index, isSignedIn),
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.white,
       ),
     );
   }
 
   void _onItemTapped(int index, bool isSignedIn) {
-    if (index == 0 || isSignedIn) { // Allow access to Home screen always or if user is signed in
+    if (index == 0 || isSignedIn) {
       setState(() {
-        _selectedIndex = index; // Update the selected index
+        _selectedIndex = index;
       });
     } else {
-      _showLoginPrompt(); // Show login prompt if user is not signed in
+      _showLoginPrompt();
     }
   }
 
@@ -82,30 +95,15 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(ctx).pop(); // Close dialog
+                Navigator.of(ctx).pop();
                 setState(() {
-                  _selectedIndex = 0; // Redirect back to home screen
+                  _selectedIndex = 0; // Reset to Home if not logged in
                 });
               },
             ),
           ],
         );
       },
-    );
-  }
-}
-
-// Widget used for Home screen content
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Welcome to Home!',
-        style: TextStyle(fontSize: 24, color: Colors.black), // Change text color to black for visibility
-      ),
     );
   }
 }

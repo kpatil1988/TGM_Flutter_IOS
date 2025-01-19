@@ -1,6 +1,6 @@
+// lib/screens/auth/login_dialog.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Make sure to import provider for accessing AuthProvider
-
+import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 
 class LoginDialog extends StatelessWidget {
@@ -26,61 +26,20 @@ class LoginDialog extends StatelessWidget {
             obscureText: true,
           ),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Validation logic
-                  final username = _usernameController.text.trim();
-                  final password = _passwordController.text.trim();
-
-                  if (username.isEmpty || password.isEmpty) {
-                    // Show an alert dialog if fields are empty
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Error'),
-                          content: const Text('Please fill in both fields.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the alert
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    // If fields are filled, call login function
-                    Provider.of<AuthProvider>(context, listen: false).login();
-                    Navigator.of(context).pop(); // Close the dialog on success
-                  }
-                },
-                child: const Text('Login'),
-              ),
-              IconButton(
-                icon: const Text("Fb"),
-                onPressed: () {
-                  // Handle Facebook login
-                },
-              ),
-              IconButton(
-                icon: const Text("G"),
-                onPressed: () {
-                  // Handle Google login
-                },
-              ),
-              IconButton(
-                icon: const Text("L"),
-                onPressed: () {
-                  // Handle LinkedIn login
-                },
-              ),
-            ],
+          ElevatedButton(
+            onPressed: () {
+              final username = _usernameController.text;
+              final password = _passwordController.text;
+              if (username.isNotEmpty && password.isNotEmpty) {
+                Provider.of<AuthProvider>(context, listen: false).login(username, password);
+                Navigator.of(context).pop();
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Please enter both email/username and password')),
+                );
+              }
+            },
+            child: const Text('Login'),
           ),
         ],
       ),

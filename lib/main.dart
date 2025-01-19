@@ -1,52 +1,73 @@
+// lib/main.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'widgets/user_management_header.dart';
-import 'widgets/app_drawer.dart'; // Import the AppDrawer
 import 'screens/home_screen.dart';
-import 'screens/profile_screen.dart'; // Import ProfileScreen if not already
-import 'screens/insights_screen.dart'; // Import InsightsScreen
-import 'screens/settings_screen.dart'; // Import SettingsScreen
+import 'widgets/user_management_header.dart';
+import 'widgets/app_drawer.dart';
 import 'providers/auth_provider.dart';
+import 'screens/auth/login_dialog.dart';
+import 'config/config.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Config.load();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AuthProvider(), // Initialize the AuthProvider
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()..loadCookies()),
+      ],
       child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key); // Add key for better widget performance
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context); // Access AuthProvider
     return MaterialApp(
-      title: 'My App',
-      theme: authProvider.isDarkMode ? ThemeData.dark() : ThemeData.light(), // Toggling themes
-      home: const MainScreen(), // Use MainScreen as the home widget
+      title: 'GoldenMinds',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MainScreen(),
     );
   }
 }
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key); // Create a new MainScreen
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: UserManagementHeader(
         onSignedIn: (bool isSignedIn) {
-          // Handle updated sign-in state
-          // You can add logic here to update the UI or app state as needed
-          print('Sign-in state changed: $isSignedIn');
+          if (!isSignedIn) {
+            _showLoginDialog(context);
+          }
         },
-      ), // Now initialized with onSignedIn parameter
-      drawer: const AppDrawer(), // Instancing the AppDrawer
-      body: const HomeScreen(), // Your main content area
+      ),
+      drawer: const AppDrawer(),
+      body: const HomeScreen(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          authProvider.logout();
+        },
+        child: const Icon(Icons.logout),
+      ),
+    );
+  }
+
+  void _showLoginDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const LoginDialog();
+      },
     );
   }
 }
