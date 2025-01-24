@@ -20,6 +20,12 @@ dependencies:
   dio: ^5.0.0
   shared_preferences: ^2.0.0  # Added the shared_preferences package
   flutter_tts: ^3.2.2
+  intl: ^0.18.0
+  flutter_native_timezone: ^2.0.0
+  geolocator: ^9.0.2
+  geocoding: ^2.0.5
+  image_picker: ^0.8.7+4
+  
 
 dev_dependencies:
   flutter_test:

@@ -51,5 +51,11 @@
     <string>We need access to the microphone for speech recognition.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>We need access to the microphone for speech recognition.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to autofill city, state, and country.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to upload a profile picture.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We need permission to save photos to your library.</string>
 </dict>
 </plist>

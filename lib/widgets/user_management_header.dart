@@ -1,3 +1,5 @@
+// lib/widgets/user_management_header.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart'; // Ensure this path is correct
@@ -35,7 +37,7 @@ class UserManagementHeader extends StatelessWidget implements PreferredSizeWidge
                 context: context,
                 builder: (context) => const LogoutDialog(), // Show the logout confirmation dialog
               ).then((_) {
-                if (authProvider.isSignedIn == false) {
+                if (!authProvider.isSignedIn) {
                   // Notify parent about sign-out
                   onSignedIn(false);
                 }
@@ -43,21 +45,22 @@ class UserManagementHeader extends StatelessWidget implements PreferredSizeWidge
             }
           },
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            PopupMenuItem<String>(
-              value: 'Login',
-              enabled: !isSignedIn,
-              child: const Text('Login'),
-            ),
-            PopupMenuItem<String>(
-              value: 'Sign Up',
-              enabled: !isSignedIn,
-              child: const Text('Sign Up'),
-            ),
-            PopupMenuItem<String>(
-              value: 'Logout',
-              enabled: isSignedIn,
-              child: const Text('Logout'),
-            ),
+            if (!isSignedIn)
+              ...[
+                const PopupMenuItem<String>(
+                  value: 'Login',
+                  child: Text('Login'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Sign Up',
+                  child: Text('Sign Up'),
+                ),
+              ],
+            if (isSignedIn)
+              const PopupMenuItem<String>(
+                value: 'Logout',
+                child: Text('Logout'),
+              ),
           ],
         ),
       ],

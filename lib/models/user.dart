@@ -4,6 +4,7 @@ class User {
   final bool isSubscribed;
   final bool isEmailVerified;
   final String redirectUrl;  // If you want to capture and use redirectUrl
+  final String firstName;
 
   User({
     required this.sessionId,
@@ -11,6 +12,7 @@ class User {
     required this.isSubscribed,
     required this.isEmailVerified,
     this.redirectUrl = '',  // optional, you may decide to use it
+    this.firstName = ''
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class User {
       isSubscribed: json['isSubscribed'],
       isEmailVerified: json['isEmailVerified'],
       redirectUrl: json['redirectUrl'] ?? '',
+      firstName : json['firstName'] ?? ''
     );
   }
 }

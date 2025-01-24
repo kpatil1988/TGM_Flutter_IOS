@@ -1,3 +1,5 @@
+// lib/screens/home_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -5,7 +7,7 @@ import 'daily_nurtures_screen.dart';
 import 'log_mood_screen.dart';
 import 'instant_screen.dart'; // Import the InstantScreen
 
-// Widget for Home
+// Widget for displaying the Home screen content
 class HomeWidget extends StatelessWidget {
   const HomeWidget({Key? key}) : super(key: key);
 
@@ -20,7 +22,7 @@ class HomeWidget extends StatelessWidget {
   }
 }
 
-// Main Home Screen
+// Main Home Screen containing bottom navigation
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -31,7 +33,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // Changed this to ensure that constructors which are not const do not cause issues
   final List<Widget> _screens = [
     HomeWidget(),
     InstantScreen(), // Now using non-const constructors
@@ -75,12 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onItemTapped(int index, bool isSignedIn) {
-    if (index == 0 || isSignedIn) {
+    if (index == 0 || isSignedIn) { // Allow access to home always
       setState(() {
         _selectedIndex = index;
       });
     } else {
-      _showLoginPrompt();
+      _showLoginPrompt(); // Show prompt if trying to access a restricted screen
     }
   }
 

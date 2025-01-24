@@ -53,12 +53,6 @@ class MainScreen extends StatelessWidget {
       ),
       drawer: const AppDrawer(),
       body: const HomeScreen(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          authProvider.logout();
-        },
-        child: const Icon(Icons.logout),
-      ),
     );
   }
 
