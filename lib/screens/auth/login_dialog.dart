@@ -13,6 +13,7 @@ class _LoginDialogState extends State<LoginDialog> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   String? loginError; // Holds the error message
+  bool _isPasswordVisible = false; // State variable for password visibility
 
   Future<void> _handleLogin(BuildContext context) async {
     // Grab username and password
@@ -70,11 +71,23 @@ class _LoginDialogState extends State<LoginDialog> {
             decoration: const InputDecoration(labelText: 'Email/Username'),
           ),
 
-          // Password field
+          // Password field with visibility toggle
           TextField(
             controller: _passwordController,
-            decoration: const InputDecoration(labelText: 'Password'),
-            obscureText: true,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible; // Toggle visibility
+                  });
+                },
+              ),
+            ),
+            obscureText: !_isPasswordVisible, // Toggle the obscureText based on visibility state
           ),
 
           // Error message (display when loginError is non-null)

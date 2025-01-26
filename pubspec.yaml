@@ -1,7 +1,7 @@
 name: goldenminds
 description: "The Golden Minds App for your holistic well-being"
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -11,26 +11,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^6.0.0
-  flutter_signin_button: ^2.0.0  # Ensure you're using the correct package
   cupertino_icons: ^1.0.8
-  multi_select_flutter: ^4.0.0
-  speech_to_text: ^7.0.0
-  http: ^1.2.2
-  dio: ^5.0.0
-  shared_preferences: ^2.0.0  # Added the shared_preferences package
-  flutter_tts: ^3.2.2
-  intl: ^0.18.0
+  dio: ^5.7.0
+  flutter_lints: ^5.0.0
   flutter_native_timezone: ^2.0.0
+  flutter_signin_button: ^2.0.0
+  flutter_tts: ^3.8.5
+  geocoding: ^2.2.2
   geolocator: ^9.0.2
-  geocoding: ^2.0.5
-  image_picker: ^0.8.7+4
-  
+  health: ^10.0.1
+  http: ^1.2.2
+  intl: ^0.18.1
+  image_picker: ^0.8.9
+  multi_select_flutter: ^4.1.3
+  provider: ^6.1.2
+  shared_preferences: ^2.3.6
+  speech_to_text: ^7.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true

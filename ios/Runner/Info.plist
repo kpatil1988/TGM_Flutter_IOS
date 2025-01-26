@@ -57,5 +57,9 @@
     <string>We need access to your photo library to upload a profile picture.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>We need permission to save photos to your library.</string>
+    <key>NSHealthShareUsageDescription</key>
+    <string>This app requires access to health data to sync.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>This app requires permission to update your health data.</string>
 </dict>
 </plist>

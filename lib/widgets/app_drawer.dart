@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import provider for AuthProvider
-import '../screens/insights_screen.dart'; // Import the Insights screen
-import '../screens/settings_screen.dart'; // Import the Settings screen
-import '../screens/profile_screen.dart'; // Import the Profile screen
-import '../providers/auth_provider.dart'; // Import AuthProvider
+import 'package:provider/provider.dart';
+import '../screens/insights_screen.dart';
+import '../screens/settings_screen.dart';
+import '../screens/profile_screen.dart';
+import '../screens/health_sync_screen.dart'; // Import HealthSyncScreen
+import '../providers/auth_provider.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -12,20 +13,21 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: const Color(0xFFEFEFEF), // Light background color for iOS feel
+        color: const Color(0xFF1F1F1F), // Dark background color
         child: ListView(
-          padding: EdgeInsets.zero, // No additional padding around the ListView
+          padding: EdgeInsets.zero,
           children: [
             _buildDrawerHeader(context),
             _buildDrawerItem(context, Icons.person, 'Profile', () => _navigateToProfile(context)),
             _buildDrawerItem(context, Icons.dashboard, 'Insights', () => _navigateToInsights(context)),
+            _buildDrawerItem(context, Icons.health_and_safety, 'Health Sync', () => _navigateToHealthSync(context)), // NEW MENU
             _buildDrawerItem(context, Icons.settings, 'Settings', () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsScreen()),
               );
             }),
-            _buildThemeToggle(context), // Add the theme toggle here
+            _buildThemeToggle(context),
           ],
         ),
       ),
@@ -33,14 +35,15 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildDrawerHeader(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).padding.top; // Get the status bar height
+    final statusBarHeight = MediaQuery.of(context).padding.top;
     return Container(
-      padding: EdgeInsets.fromLTRB(16.0, statusBarHeight + 16.0, 16.0, 16.0), // Dynamic padding
+      padding: EdgeInsets.fromLTRB(16.0, statusBarHeight + 16.0, 16.0, 16.0),
+      color: const Color(0xFF333333), // Header background color
       child: Row(
         children: [
           const CircleAvatar(
             radius: 30.0,
-            //backgroundImage: AssetImage('assets/images/profile.jpg'), // Your profile image
+            backgroundColor: Colors.blue, // Avatar background color
           ),
           const SizedBox(width: 16),
           const Text(
@@ -48,6 +51,7 @@ class AppDrawer extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
+              color: Colors.white, // Header text color
             ),
           ),
         ],
@@ -57,49 +61,58 @@ class AppDrawer extends StatelessWidget {
 
   Widget _buildDrawerItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: Colors.blue),
-      title: Text(title),
-      onTap: onTap, // Add the tap function to navigate
-      tileColor: Colors.transparent, // Transparent background
+      leading: Icon(icon, color: Colors.blue), // Icon color
+      title: Text(title, style: const TextStyle(color: Colors.white)), // Text color
+      onTap: onTap,
+      tileColor: Colors.transparent,
+      hoverColor: Colors.blueGrey, // Hover color
     );
   }
 
   Widget _buildThemeToggle(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context); // Get the AuthProvider
+    final authProvider = Provider.of<AuthProvider>(context);
     return SwitchListTile(
-      title: const Text('Dark Mode'),
+      title: const Text('Dark Mode', style: TextStyle(color: Colors.white)), // Text color
       value: authProvider.isDarkMode,
       onChanged: (bool value) {
-        authProvider.toggleTheme(); // Call toggle function from AuthProvider
+        authProvider.toggleTheme();
       },
-      secondary: const Icon(Icons.brightness_6), // Optional icon
+      secondary: const Icon(Icons.brightness_6, color: Colors.white), // Icon color
     );
   }
 
   void _navigateToProfile(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false); // Get the AuthProvider
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (authProvider.isSignedIn) {
-      // User is signed in, navigate to ProfileScreen
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ProfileScreen()),
       );
     } else {
-      // User is not signed in, show login prompt
       _showLoginPrompt(context);
     }
   }
 
   void _navigateToInsights(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false); // Get the AuthProvider
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (authProvider.isSignedIn) {
-      // User is signed in, navigate to InsightsScreen
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const InsightsScreen()),
       );
     } else {
-      // User is not signed in, show login prompt
+      _showLoginPrompt(context);
+    }
+  }
+
+  void _navigateToHealthSync(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (authProvider.isSignedIn) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HealthSyncScreen()), // NEW NAVIGATION
+      );
+    } else {
       _showLoginPrompt(context);
     }
   }
@@ -115,7 +128,7 @@ class AppDrawer extends StatelessWidget {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(ctx).pop(); // Close dialog
+                Navigator.of(ctx).pop();
               },
             ),
           ],
