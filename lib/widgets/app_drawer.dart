@@ -54,18 +54,18 @@ class AppDrawer extends StatelessWidget {
               color: Colors.white, // Header text color
             ),
           ),
-        ],
+        ], // Closing children
       ),
-    );
+    ); // Closing Container
   }
 
   Widget _buildDrawerItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: Colors.blue), // Icon color
-      title: Text(title, style: const TextStyle(color: Colors.white)), // Text color
+      leading: Icon(icon, color: Colors.blueAccent), // Updated color
+      title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)), // Updated text style
       onTap: onTap,
       tileColor: Colors.transparent,
-      hoverColor: Colors.blueGrey, // Hover color
+      hoverColor: Colors.blueGrey.shade700, // Updated hover color
     );
   }
 

@@ -1,5 +1,3 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -69,8 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: (index) => _onItemTapped(index, isSignedIn),
         backgroundColor: Colors.black,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.blue, // Selected item text color
+        unselectedItemColor: Colors.grey[300], // Unselected item text color
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold), // Bold selected label
       ),
     );
   }
