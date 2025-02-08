@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'daily_nurtures_screen.dart';
-import 'log_mood_screen.dart';
-import 'instant_screen.dart'; // Import the InstantScreen
+import 'moodLog/log_mood_screen.dart';
+import 'moodLog/instant_screen.dart'; // Import the InstantScreen
 
 // Widget for displaying the Home screen content
 class HomeWidget extends StatelessWidget {
