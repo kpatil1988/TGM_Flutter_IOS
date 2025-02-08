@@ -8,10 +8,16 @@ import 'widgets/app_drawer.dart';
 import 'providers/auth_provider.dart';
 import 'screens/auth/login_dialog.dart';
 import 'config/config.dart';
+import 'screens/inAppActivities/affirmation_catcher.dart';
+import 'screens/inAppActivities/bouncing_balls.dart';
+import 'screens/inAppActivities/breath_activity.dart';
+import 'screens/inAppActivities/flip_the_story.dart';
+import 'screens/inAppActivities/zenscribbler.dart';
+import 'screens/inAppActivities/bubble_wrap.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Config.load();
+  await Config.load(); // Load configuration settings
 
   runApp(
     MultiProvider(
@@ -32,6 +38,15 @@ class MyApp extends StatelessWidget {
       title: 'GoldenMinds',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const MainScreen(),
+      routes: {
+        '/affirmationCatcher': (context) => const AffirmationCatcher(),
+        '/breath': (context) => const Breathe(),
+        '/bubbleWrap': (context) => const VirtualBubbleWrap(),
+        '/flipTheStory': (context) => const FlipTheStory(),
+        '/bouncingBalls': (context) => const BouncingBalls(),
+        '/zenScribbler': (context) => const ZenScribbler()
+        // Add more routes here if needed
+      },
     );
   }
 }
@@ -41,8 +56,6 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final authProvider = Provider.of<AuthProvider>(context);
-
     return Scaffold(
       appBar: UserManagementHeader(
         onSignedIn: (bool isSignedIn) {

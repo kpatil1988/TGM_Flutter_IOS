@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../screens/insights_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/profile_screen.dart';
-import '../screens/health_sync_screen.dart'; // Import HealthSyncScreen
+import '../screens/health_sync_screen.dart';
 import '../providers/auth_provider.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -20,7 +20,8 @@ class AppDrawer extends StatelessWidget {
             _buildDrawerHeader(context),
             _buildDrawerItem(context, Icons.person, 'Profile', () => _navigateToProfile(context)),
             _buildDrawerItem(context, Icons.dashboard, 'Insights', () => _navigateToInsights(context)),
-            _buildDrawerItem(context, Icons.health_and_safety, 'Health Sync', () => _navigateToHealthSync(context)), // NEW MENU
+            _buildDrawerItem(context, Icons.health_and_safety, 'Health Sync', () => _navigateToHealthSync(context)),
+            _buildRestrictedActivitiesMenu(context), // Restricted Activities Menu
             _buildDrawerItem(context, Icons.settings, 'Settings', () {
               Navigator.push(
                 context,
@@ -54,30 +55,88 @@ class AppDrawer extends StatelessWidget {
               color: Colors.white, // Header text color
             ),
           ),
-        ], // Closing children
+        ],
       ),
-    ); // Closing Container
+    );
   }
 
   Widget _buildDrawerItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: Colors.blueAccent), // Updated color
-      title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)), // Updated text style
+      leading: Icon(icon, color: Colors.blueAccent),
+      title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
       onTap: onTap,
       tileColor: Colors.transparent,
-      hoverColor: Colors.blueGrey.shade700, // Updated hover color
+      hoverColor: Colors.blueGrey.shade700,
     );
   }
 
   Widget _buildThemeToggle(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     return SwitchListTile(
-      title: const Text('Dark Mode', style: TextStyle(color: Colors.white)), // Text color
+      title: const Text('Dark Mode', style: TextStyle(color: Colors.white)),
       value: authProvider.isDarkMode,
       onChanged: (bool value) {
         authProvider.toggleTheme();
       },
-      secondary: const Icon(Icons.brightness_6, color: Colors.white), // Icon color
+      secondary: const Icon(Icons.brightness_6, color: Colors.white),
+    );
+  }
+
+  Widget _buildRestrictedActivitiesMenu(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    // Check if the user is signed in
+    if (!authProvider.isSignedIn) {
+      return ListTile(
+        leading: const Icon(Icons.directions_run, color: Colors.blueAccent),
+        title: const Text(
+          'Activities',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
+        onTap: () {
+          _showLoginPrompt(context); // Show login prompt if user is not signed in
+        },
+      );
+    }
+
+    // If the user is signed in, show the Activities menu
+    return ExpansionTile(
+      leading: const Icon(Icons.directions_run, color: Colors.blueAccent),
+      title: const Text(
+        'Activities',
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+      ),
+      children: [
+        _buildSubMenuItem(context, 'Inhale/Exhale', () {
+          Navigator.pushNamed(context, '/breath');
+        }),
+        _buildSubMenuItem(context, 'Affirmation Catcher', () {
+          Navigator.pushNamed(context, '/affirmationCatcher');
+        }),
+        _buildSubMenuItem(context, 'Bubble Wrap', () {
+          Navigator.pushNamed(context, '/bubbleWrap');
+        }),
+        _buildSubMenuItem(context, 'Flip the Story', () {
+          Navigator.pushNamed(context, '/flipTheStory');
+        }),
+        _buildSubMenuItem(context, 'Bouncing Balls', () {
+          Navigator.pushNamed(context, '/bouncingBalls');
+        }),
+        _buildSubMenuItem(context, 'Zen Scribbler', () {
+          Navigator.pushNamed(context, '/zenScribbler');
+        }),
+      ],
+    );
+  }
+
+  Widget _buildSubMenuItem(BuildContext context, String title, VoidCallback onTap) {
+    return ListTile(
+      title: Text(
+        title,
+        style: const TextStyle(color: Colors.white),
+      ),
+      onTap: onTap,
+      hoverColor: Colors.blueGrey.shade700,
     );
   }
 
@@ -110,7 +169,7 @@ class AppDrawer extends StatelessWidget {
     if (authProvider.isSignedIn) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const HealthSyncScreen()), // NEW NAVIGATION
+        MaterialPageRoute(builder: (context) => const HealthSyncScreen()),
       );
     } else {
       _showLoginPrompt(context);
