@@ -119,11 +119,20 @@ class AppDrawer extends StatelessWidget {
         _buildSubMenuItem(context, 'Flip the Story', () {
           Navigator.pushNamed(context, '/flipTheStory');
         }),
-        _buildSubMenuItem(context, 'Bouncing Balls', () {
-          Navigator.pushNamed(context, '/bouncingBalls');
-        }),
         _buildSubMenuItem(context, 'Zen Scribbler', () {
           Navigator.pushNamed(context, '/zenScribbler');
+        }),
+        _buildSubMenuItem(context, 'Timer Stop', () {
+          Navigator.pushNamed(context, '/timerGame');
+        }),
+        _buildSubMenuItem(context, 'Ripple Effect', () {
+          Navigator.pushNamed(context, '/rippleEffect');
+        }),
+        _buildSubMenuItem(context, 'Breathing Circle', () {
+          Navigator.pushNamed(context, '/breathingCircle');
+        }),
+        _buildSubMenuItem(context, 'Floating Feathers', () {
+          Navigator.pushNamed(context, '/floatingFeathers');
         }),
       ],
     );

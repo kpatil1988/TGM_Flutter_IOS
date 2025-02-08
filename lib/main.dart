@@ -9,12 +9,14 @@ import 'providers/auth_provider.dart';
 import 'screens/auth/login_dialog.dart';
 import 'config/config.dart';
 import 'screens/inAppActivities/affirmation_catcher.dart';
-import 'screens/inAppActivities/bouncing_balls.dart';
 import 'screens/inAppActivities/breath_activity.dart';
 import 'screens/inAppActivities/flip_the_story.dart';
 import 'screens/inAppActivities/zenscribbler.dart';
 import 'screens/inAppActivities/bubble_wrap.dart';
-
+import 'screens/inAppActivities/breathing_circle.dart';
+import 'screens/inAppActivities/floating_feathers.dart';
+import 'screens/inAppActivities/riplle_effect.dart';
+import 'screens/inAppActivities/timer_game.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Config.load(); // Load configuration settings
@@ -43,8 +45,11 @@ class MyApp extends StatelessWidget {
         '/breath': (context) => const Breathe(),
         '/bubbleWrap': (context) => const VirtualBubbleWrap(),
         '/flipTheStory': (context) => const FlipTheStory(),
-        '/bouncingBalls': (context) => const BouncingBalls(),
-        '/zenScribbler': (context) => const ZenScribbler()
+        '/zenScribbler': (context) => const ZenScribbler(),
+        '/rippleEffect': (context) => const RippleEffect(),
+        '/breathingCircle': (context) => const BreathingCircle(),
+         '/floatingFeathers': (context) => const FloatingFeathers(),
+         '/timerGame': (context) => const TimerGame()
         // Add more routes here if needed
       },
     );
